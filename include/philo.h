@@ -6,7 +6,7 @@
 /*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 16:26:24 by chatou            #+#    #+#             */
-/*   Updated: 2024/09/20 15:35:54 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/20 17:10:55 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,10 @@ void			assign_forks(t_philo *philo, t_fork *forks, int pos);
 //- checker.c	---------------------------------------------------------------/
 void			sim_checker(t_data *data);
 bool			is_all_philos_full(t_philo *philos, int max_philos);
+void			monitor_sim(t_data *data);
 
 //- dinner.c	---------------------------------------------------------------/
-bool			start_sim(t_data *data);
+void			start_sim(t_data *data);
 void			*dinner_sim(void *data);
 void			philo_eat(t_philo *philo);
 void			philo_sleep_n_think(t_philo *philo);

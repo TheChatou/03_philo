@@ -6,7 +6,7 @@
 /*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:20:08 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/20 16:29:06 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/20 17:43:34 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,38 +36,24 @@
 // et execute les actions des philosophes (eat, sleep, think).
 // Prend le temps de debut de la simulation, puis la seconde boucle
 // attend que tous les threads aient fini.
-bool	start_sim(t_data *data)
+void	start_sim(t_data *data)
 {
 	int		i;
 
 	i = -1;
 	if (data->nb_philo == 1)
-		return (one_sad_dead_philosopher(data), false);
+		return (one_sad_dead_philosopher(data));
 	data->start_threads = true;
 	safe_mutex(&data->all_thr_ready_mtx, LOCK);
 	while (++i < data->nb_philo)
 		if (!safe_thread(&data->philos[i].thread_id, dinner_sim,
 				&data->philos[i], CREATE))
-			return (false);
+			return ;
 	safe_mutex(&data->all_thr_ready_mtx, UNLOCK);
 	data->start_sim = get_time(MILLISECOND);
 	if (!data->start_sim)
-		return (false);
-	i = -1;
-	while (++i < data->nb_philo)
-	{
-		if (is_philo_full(&data->philos[i]))
-		{
-			safe_thread(&data->philos[i].thread_id, NULL, NULL, JOIN);
-			data->philos[i].is_joined = true;
-		}
-		sim_checker(data);
-		if (is_philo_dead(&data->philos[i]) || is_finished_sim(data))
-			return (true);
-		i = i % data->nb_philo;
-		usleep(10);
-	}
-	return (true);
+		return ;
+	return (monitor_sim(data));
 }
 
 //	Fonction principale des threads, qui execute les actions des philosophes
@@ -88,8 +74,8 @@ void	*dinner_sim(void *d_philo)
 	{
 		philo_eat(philo);
 		philo_sleep_n_think(philo);
-		if (philo->data->nb_philo % 2 == 1 && philo->id % 3 == 0)
-			usleep(50);
+		// if (philo->data->nb_philo % 2 == 1)
+		// 	precise_sleep(1, philo->data);
 	}
 	return (NULL);
 }
@@ -116,7 +102,7 @@ void	philo_sleep_n_think(t_philo *philo)
 	precise_sleep(philo->data->time_to_sleep, philo->data);
 	print_status(THINK, philo, NO_DEBUG);
 	if (philo->data->nb_philo % 2 == 1)
-		precise_sleep(2 * philo->data->time_to_eat
+		precise_sleep(philo->data->time_to_eat
 			- philo->data->time_to_sleep, philo->data);
 }
 
