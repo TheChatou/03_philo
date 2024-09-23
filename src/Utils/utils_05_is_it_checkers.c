@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_05_is_it_checkers.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeada-si <jeada-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 18:04:04 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/20 16:17:55 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/23 13:01:34 by jeada-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool	is_philo_full(t_philo *philo)
 
 bool	is_philo_dead(t_philo *philo)
 {
-	return (get_bool_mtx(&philo->philo_mtx, &philo->data->one_is_dead));
+	return (get_bool_mtx(&philo->data->data_mtx, &philo->data->one_is_dead));
 }
 
 bool	is_starving(t_philo *philo)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dinner.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeada-si <jeada-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:20:08 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/20 17:43:34 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/23 13:08:31 by jeada-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	philo_eat(t_philo *philo)
 	print_status(EAT, philo, NO_DEBUG);
 	precise_sleep(philo->data->time_to_eat, philo->data);
 	if (philo->data->rounds > 0 && philo->data->rounds == philo->nb_meal)
-		set_bool_mtx(&philo->data->data_mtx, &philo->is_full, true);
+		set_bool_mtx(&philo->philo_mtx, &philo->is_full, true);
 	safe_mutex(&philo->a_fork->fork_mtx, UNLOCK);
 	safe_mutex(&philo->b_fork->fork_mtx, UNLOCK);
 }
