@@ -3,35 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   dinner.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeada-si <jeada-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:20:08 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/23 14:09:23 by jeada-si         ###   ########.fr       */
+/*   Updated: 2024/09/23 15:09:15 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// Thread
-// Imagine que tu as une cuisine où plusieurs cuisiniers (threads) travaillent
-// ensemble pour préparer un repas. Chaque cuisinier peut travailler sur
-// une tâche différente en même temps, comme couper des légumes, cuire
-// de la viande, ou préparer une sauce. Tous les cuisiniers partagent la même
-// cuisine et les mêmes ustensiles (ressources du processus),
-// mais chacun suit sa propre recette (compteur de programme et pile).
-//
-// Mutex
-// Maintenant, imagine que ces cuisiniers doivent partager un seul couteau
-// très spécial (ressource partagée). Pour éviter que deux cuisiniers n'essaient
-// d'utiliser le couteau en même temps et ne se blessent (condition de course),
-// ils utilisent un système de réservation (mutex). Quand un cuisinier veut
-// utiliser le couteau, il doit d'abord le réserver (verrouiller le mutex).
-// Pendant qu'il utilise le couteau, les autres cuisiniers doivent attendre
-// leur tour (attendre que le mutex soit déverrouillé). Une fois qu'il a fini,
-// il rend le couteau (déverrouille le mutex) pour que le prochain cuisinier
-// puisse l'utiliser.
-//
-//
 //	Lance la simulation, la premiere boucle cree les threads,
 // et execute les actions des philosophes (eat, sleep, think).
 // Prend le temps de debut de la simulation, puis la seconde boucle
@@ -64,7 +44,7 @@ void	*dinner_sim(void *d_philo)
 
 	philo = (t_philo *)d_philo;
 	safe_mutex(&philo->data->all_thr_ready_mtx, LOCK);
-	usleep(1);
+	precise_sleep(1, philo->data);
 	safe_mutex(&philo->data->all_thr_ready_mtx, UNLOCK);
 	set_long_mtx(&philo->philo_mtx, &philo->last_meal, get_time(MILLISECOND));
 	if (philo->id % 2 == 1)
@@ -76,8 +56,6 @@ void	*dinner_sim(void *d_philo)
 	{
 		philo_eat(philo);
 		philo_sleep_n_think(philo);
-		// if (philo->data->nb_philo % 2 == 1)
-		// 	precise_sleep(1, philo->data);
 	}
 	return (NULL);
 }
@@ -103,7 +81,7 @@ void	philo_sleep_n_think(t_philo *philo)
 	print_status(SLEEP, philo, NO_DEBUG);
 	precise_sleep(philo->data->time_to_sleep, philo->data);
 	print_status(THINK, philo, NO_DEBUG);
-	if (philo->data->nb_philo % 2 == 1)
+	if (philo->data->nb_philo % 2 == 1 && philo->id % 2 == 1)
 		precise_sleep(philo->data->time_to_eat * 2
 			- philo->data->time_to_sleep, philo->data);
 	else

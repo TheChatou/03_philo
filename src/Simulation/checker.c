@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeada-si <jeada-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 17:21:48 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/23 13:00:52 by jeada-si         ###   ########.fr       */
+/*   Updated: 2024/09/23 15:08:48 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	sim_checker(t_data *data)
 		}
 		if (i == (data->nb_philo - 1))
 			i = -1;
-		usleep(1);
+		precise_sleep(1, data);
 	}
 	return ;
 }
@@ -58,17 +58,12 @@ void	monitor_sim(t_data *data)
 	i = -1;
 	while (++i < data->nb_philo)
 	{
-		// if (is_philo_full(&data->philos[i]))
-		// {
-		// 	safe_thread(&data->philos[i].thread_id, NULL, NULL, JOIN);
-		// 	data->philos[i].is_joined = true;
-		// }
 		sim_checker(data);
 		if (is_philo_dead(&data->philos[i]) || is_finished_sim(data))
 			return ;
 		if (i == (data->nb_philo - 1))
 			i = -1;
-		usleep(10);
+		precise_sleep(10, data);
 	}
 	return ;
 }
