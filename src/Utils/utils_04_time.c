@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_04_time.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeada-si <jeada-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:50:07 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/19 13:08:42 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:01:50 by jeada-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ long	get_time(t_time_code time_code)
 		return (0);
 }
 
-void	precise_sleep(long usec, t_data *data)
+void	precise_sleep(long msec, t_data *data)
 {
 	long	start;
 	long	delta;
@@ -36,16 +36,16 @@ void	precise_sleep(long usec, t_data *data)
 
 	(void)data;
 	start = get_time(MILLISECOND);
-	while (get_time(MILLISECOND) - start < usec)
+	while (get_time(MILLISECOND) - start < msec)
 	{
 		if (is_finished_sim(data))
 			break ;
 		delta = get_time(MILLISECOND) - start;
-		remaining = usec - delta;
+		remaining = msec - delta;
 		if (remaining > 1000)
-			usleep(usec / 2);
+			usleep(msec / 2);
 		else
-			while (get_time(MILLISECOND) - start < usec)
+			while (get_time(MILLISECOND) - start < msec)
 				;
 	}
 }

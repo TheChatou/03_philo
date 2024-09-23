@@ -6,7 +6,7 @@
 /*   By: jeada-si <jeada-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:20:08 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/23 13:08:31 by jeada-si         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:09:23 by jeada-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,9 @@ void	*dinner_sim(void *d_philo)
 	safe_mutex(&philo->data->all_thr_ready_mtx, UNLOCK);
 	set_long_mtx(&philo->philo_mtx, &philo->last_meal, get_time(MILLISECOND));
 	if (philo->id % 2 == 1)
-		usleep(10);
+		precise_sleep(philo->data->time_to_eat, philo->data);
+	if (philo->id == 1 && philo->data->nb_philo % 2 == 1)
+		precise_sleep(philo->data->time_to_eat, philo->data);
 	while (!is_philo_dead(philo) && !is_finished_sim(philo->data)
 		&& !is_philo_full(philo))
 	{
@@ -102,8 +104,11 @@ void	philo_sleep_n_think(t_philo *philo)
 	precise_sleep(philo->data->time_to_sleep, philo->data);
 	print_status(THINK, philo, NO_DEBUG);
 	if (philo->data->nb_philo % 2 == 1)
-		precise_sleep(philo->data->time_to_eat
+		precise_sleep(philo->data->time_to_eat * 2
 			- philo->data->time_to_sleep, philo->data);
+	else
+		precise_sleep(philo->data->time_to_eat
+			- philo->data->time_to_die, philo->data);
 }
 
 void	one_sad_dead_philosopher(t_data *data)
