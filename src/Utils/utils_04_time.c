@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   utils_04_time.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeada-si <jeada-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:50:07 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/23 14:01:50 by jeada-si         ###   ########.fr       */
+/*   Updated: 2024/09/23 19:03:24 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+//	Focntion pour recuperer le temps actuel, en fonction du Time_code choisi :
+// (SECOND, MILLISECOND, MICROSECOND).
 long	get_time(t_time_code time_code)
 {
 	struct timeval	time;
@@ -28,24 +30,25 @@ long	get_time(t_time_code time_code)
 		return (0);
 }
 
+//	Fonction pour attendre un certain temps en millisecondes.
 void	precise_sleep(long msec, t_data *data)
 {
-	long	start;
-	long	delta;
-	long	remaining;
-
 	(void)data;
-	start = get_time(MILLISECOND);
-	while (get_time(MILLISECOND) - start < msec)
+	if (msec < 0)
+		msec = -msec;
+	while (msec)
 	{
 		if (is_finished_sim(data))
 			break ;
-		delta = get_time(MILLISECOND) - start;
-		remaining = msec - delta;
-		if (remaining > 1000)
-			usleep(msec / 2);
+		if (msec > 1000)
+		{
+			usleep(1000 * 1000);
+			msec -= 1000;
+		}
 		else
-			while (get_time(MILLISECOND) - start < msec)
-				;
+		{
+			usleep(msec * 1000);
+			break ;
+		}
 	}
 }

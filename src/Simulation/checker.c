@@ -6,12 +6,13 @@
 /*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 17:21:48 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/23 15:08:48 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/23 18:33:53 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+//	Fonction qui vérifie si la simulation est terminée
 void	sim_checker(t_data *data)
 {
 	int		i;
@@ -32,11 +33,12 @@ void	sim_checker(t_data *data)
 		}
 		if (i == (data->nb_philo - 1))
 			i = -1;
-		precise_sleep(1, data);
+		usleep(10);
 	}
 	return ;
 }
 
+//	Fonction qui vérifie si tout les philosophes ont mangé
 bool	is_all_philos_full(t_philo *philos, int max_philos)
 {
 	int		i;
@@ -51,6 +53,7 @@ bool	is_all_philos_full(t_philo *philos, int max_philos)
 	return (true);
 }
 
+//	Fonction boucle qui verifie la simulation en continu
 void	monitor_sim(t_data *data)
 {
 	int	i;
@@ -63,7 +66,7 @@ void	monitor_sim(t_data *data)
 			return ;
 		if (i == (data->nb_philo - 1))
 			i = -1;
-		precise_sleep(10, data);
+		usleep(10);
 	}
 	return ;
 }

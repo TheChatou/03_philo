@@ -6,18 +6,20 @@
 /*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:16:28 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/20 15:35:51 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/23 18:24:53 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+//	Initialise a zero la structure t_fork
 void	init_fork(t_fork *fork)
 {
 	fork->id = 0;
 	fork->fork_mtx = (t_mtx){0};
 }
 
+//	Initialise a zero ou NULL la structure t_philo
 void	init_philo(t_philo *philo)
 {
 	philo->id = 0;
@@ -32,6 +34,7 @@ void	init_philo(t_philo *philo)
 	philo->data = NULL;
 }
 
+//	Initialise a zero ouu NULL la structure t_data
 void	init_data(t_data *data)
 {
 	data->nb_philo = 0;
@@ -52,6 +55,8 @@ void	init_data(t_data *data)
 	data->all_thr_ready_mtx = (t_mtx){0};
 }
 
+//	Malloc puis Memset a 0 le tableau de booleen nb_philos_full
+// aui me sert a savoir quand tous les philosophes ont mange.
 bool	init_n_malloc_full_bools(t_data *data, int max_philos)
 {
 	data->nb_philos_full = malloc(sizeof(bool) * max_philos);
@@ -61,6 +66,8 @@ bool	init_n_malloc_full_bools(t_data *data, int max_philos)
 	return (true);
 }
 
+//	Malloc puis initialise a zero les fourchettes, puis initialise
+// les mutex de chaque fourchette, et leur donne un id.
 bool	init_malloc_n_set_forks(t_data *data, long max_philos)
 {
 	int	i;

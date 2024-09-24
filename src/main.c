@@ -6,7 +6,7 @@
 /*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 16:35:08 by chatou            #+#    #+#             */
-/*   Updated: 2024/09/20 15:36:39 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/23 18:25:46 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int ac, char **av)
 
 	if (ac == 5 || ac == 6)
 	{
-		if (!set_data(&data, av))
+		if (!init_n_set_data(&data, av))
 			return (free_sim(&data), 0);
 		start_sim(&data);
 		free_sim(&data);

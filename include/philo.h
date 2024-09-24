@@ -6,7 +6,7 @@
 /*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 16:26:24 by chatou            #+#    #+#             */
-/*   Updated: 2024/09/20 17:10:55 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/23 18:25:57 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ typedef struct s_philo
 //	- All_threads_ready : Bool pour savoir si tous les threads sont prets
 //  - Data_mtx : Mutex pour synchroniser les donnees, afin d'eviter que
 // les threads n'accedent en meme temps aux donnees partagees
-// (philos, forks, etc) 
 //  - Print_mtx : Mutex pour synchroniser l'affichage, afin d'eviter que
 // les philosophes n'affichent en meme temps leurs actions
 typedef struct s_data
@@ -134,7 +133,7 @@ bool			init_n_malloc_full_bools(t_data *data, int max_philos);
 bool			init_malloc_n_set_forks(t_data *data, long max_philos);
 
 //- Init_And_Set_01.c	-------------------------------------------------------/
-bool			set_data(t_data *data, char **av);
+bool			init_n_set_data(t_data *data, char **av);
 bool			set_data_args(t_data *data, char **av);
 bool			init_malloc_n_set_philos(t_data *data, long max_philos);
 bool			set_philos(t_data *data, t_philo *philo, int i);

@@ -6,14 +6,13 @@
 /*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:30:49 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/18 18:04:02 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/23 19:01:52 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-//	Lock Mutex for other threads, before changing the value of a bool
-// then unlock it.
+//	Lock Mutex pour les autres threads, avant de changer la valeur d'un booléen
 void	set_bool_mtx(t_mtx *mutex, bool *dest, bool value)
 {
 	safe_mutex(mutex, LOCK);
@@ -21,7 +20,7 @@ void	set_bool_mtx(t_mtx *mutex, bool *dest, bool value)
 	safe_mutex(mutex, UNLOCK);
 }
 
-//	Lock Mutex for other threads, return the value of the bool argument.
+//	Lock Mutex pour les autres threads, retourne la valeur du booléen argument.
 bool	get_bool_mtx(t_mtx *mutex, bool *src)
 {
 	bool	ret;
@@ -32,7 +31,7 @@ bool	get_bool_mtx(t_mtx *mutex, bool *src)
 	return (ret);
 }
 
-//	Lock Mutex for other threads, before changing the value of a long
+//	Lock Mutex pour les autres threads, avant de changer la valeur d'un long
 void	set_long_mtx(t_mtx *mutex, long *dest, long value)
 {
 	safe_mutex(mutex, LOCK);
@@ -40,7 +39,7 @@ void	set_long_mtx(t_mtx *mutex, long *dest, long value)
 	safe_mutex(mutex, UNLOCK);
 }
 
-//	Lock Mutex for other threads, return the value of the long argument.
+//	Lock Mutex pour les autres threads, retourne la valeur du long argument.
 long	get_long_mtx(t_mtx *mutex, long *src)
 {
 	long	ret;

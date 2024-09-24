@@ -6,16 +6,16 @@
 /*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 15:20:08 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/23 15:09:15 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/23 18:55:18 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-//	Lance la simulation, la premiere boucle cree les threads,
-// et execute les actions des philosophes (eat, sleep, think).
-// Prend le temps de debut de la simulation, puis la seconde boucle
-// attend que tous les threads aient fini.
+//	Lance la simulation, si il n'y a qu'un philosophe, il meurt tristement.
+// Puis creer les threads pour chaque philosophe et grace au mutex
+// all_thr_ready_mtx, attend que tous les threads soient prets avant de lancer
+// la simulation. Enfin, lance la simulation et le moniteur.
 void	start_sim(t_data *data)
 {
 	int		i;
@@ -36,21 +36,25 @@ void	start_sim(t_data *data)
 	return (monitor_sim(data));
 }
 
-//	Fonction principale des threads, qui execute les actions des philosophes
-// (eat, sleep, think) tant que la simulation n'est pas finie.
+//	Routine des threads des philosophes. Le lock sur all_thr_ready_mtx, attend
+// la boucle de creation des threads de la fonction mere UNLOCK avant de pouvoir
+// le LOCK ici. Puis, si le philosophe est impair, il attend time_to_eat avant
+// de commencer la simulation. Ensuite le premier philosophe pair attend aussi.
+// Enfin, tant que le philosophe n'est pas mort, que la simulation n'est pas
+// finie et que le philosophe n'a pas mange le nombre de fois demande, il mange
+// puis dort et pense.
 void	*dinner_sim(void *d_philo)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)d_philo;
 	safe_mutex(&philo->data->all_thr_ready_mtx, LOCK);
-	precise_sleep(1, philo->data);
 	safe_mutex(&philo->data->all_thr_ready_mtx, UNLOCK);
 	set_long_mtx(&philo->philo_mtx, &philo->last_meal, get_time(MILLISECOND));
 	if (philo->id % 2 == 1)
 		precise_sleep(philo->data->time_to_eat, philo->data);
-	if (philo->id == 1 && philo->data->nb_philo % 2 == 1)
-		precise_sleep(philo->data->time_to_eat, philo->data);
+	if (philo->data->nb_philo % 2 == 1 && philo->id % 2 == 2)
+		precise_sleep(philo->data->time_to_eat / 2, philo->data);
 	while (!is_philo_dead(philo) && !is_finished_sim(philo->data)
 		&& !is_philo_full(philo))
 	{
@@ -60,6 +64,7 @@ void	*dinner_sim(void *d_philo)
 	return (NULL);
 }
 
+//	Le philosophe prend les fourchettes, mange, puis les relache.
 void	philo_eat(t_philo *philo)
 {
 	safe_mutex(&philo->a_fork->fork_mtx, LOCK);
@@ -76,19 +81,28 @@ void	philo_eat(t_philo *philo)
 	safe_mutex(&philo->b_fork->fork_mtx, UNLOCK);
 }
 
+//	Le philosophe dort et pense.
+// Si le nombre de philosophe est impair et si le temps de manger est
+// superieur ou egal au temps de dormir, il dort 2 fois le temps de manger
+// moins le temps de dormir. Sinon il ne dort pas.
 void	philo_sleep_n_think(t_philo *philo)
 {
+	long	time_to_wait;
+
+	if (philo->data->time_to_eat >= philo->data->time_to_sleep)
+		time_to_wait = 2 * philo->data->time_to_eat
+			- philo->data->time_to_sleep;
+	else
+		time_to_wait = 0;
 	print_status(SLEEP, philo, NO_DEBUG);
 	precise_sleep(philo->data->time_to_sleep, philo->data);
 	print_status(THINK, philo, NO_DEBUG);
-	if (philo->data->nb_philo % 2 == 1 && philo->id % 2 == 1)
-		precise_sleep(philo->data->time_to_eat * 2
-			- philo->data->time_to_sleep, philo->data);
-	else
-		precise_sleep(philo->data->time_to_eat
-			- philo->data->time_to_die, philo->data);
+	if (philo->data->nb_philo % 2 == 1)
+		precise_sleep(time_to_wait, philo->data);
 }
 
+//	Si il n'y a qu'un philosophe, il meurt tristement, apres avoir attendu
+// le temps de mourir.
 void	one_sad_dead_philosopher(t_data *data)
 {
 	data->start_sim = get_time(MILLISECOND);

@@ -6,7 +6,7 @@
 /*   By: fcoullou <fcoullou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 17:45:25 by fcoullou          #+#    #+#             */
-/*   Updated: 2024/09/20 17:30:35 by fcoullou         ###   ########.fr       */
+/*   Updated: 2024/09/23 16:37:22 by fcoullou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ void	join_threads(t_data *data)
 
 	i = -1;
 	while (++i < data->nb_philo)
-	{
-		if (!data->philos[i].is_joined)
-			safe_thread(&data->philos[i].thread_id, NULL, data, JOIN);
-	}
+		safe_thread(&data->philos[i].thread_id, NULL, data, JOIN);
 }
 
 bool	free_sim(t_data *data)
